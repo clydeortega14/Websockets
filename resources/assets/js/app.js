@@ -8,6 +8,19 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+window.BootstrapVue = require('bootstrap-vue');
+
+import store from './store';
+import localforage from './libraries/localforage';
+import router from './router';
+
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
+
+Vue.use(BootstrapVue);
+
+window.localforage = localforage
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -15,9 +28,16 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-// Vue.component('example-component', require('./components/ExampleComponent.vue'));
-Vue.component('show-post', require('./components/posts/ShowPost.vue'));
+Vue.component('navbar-component', require('./components/app/NavbarComponent.vue').default);
+Vue.component('login-component', require('./components/app/LoginComponent.vue').default);
+Vue.component('show-post', require('./components/posts/ShowPost.vue').default);
+Vue.component('user-component', require('./components/users/User.vue').default);
+Vue.component('user-table', require('./components/users/UserTable.vue').default);
+Vue.component('add-user', require('./components/users/AddUser.vue').default);
+Vue.component('edit-user', require('./components/users/EditUser.vue').default);
 
-// const app = new Vue({
-//     el: '#app'
-// });
+const app = new Vue({
+    el: '#app',
+    store,
+    router
+});

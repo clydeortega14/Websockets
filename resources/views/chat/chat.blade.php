@@ -248,7 +248,6 @@ img{ max-width:100%;}
 
 				axios.get(`/api/get-message`, {
 					headers : {
-
 						'Authorization' : 'Bearer '+this.user.api_token,
 						'Content-Type' : 'application/json'
 					}
@@ -265,7 +264,6 @@ img{ max-width:100%;}
 					message : this.newMessage
 				}, {
 					headers : {
-
 						'Authorization' : 'Bearer '+this.user.api_token,
 						'Content-Type' : 'application/json'
 					}
@@ -285,13 +283,19 @@ img{ max-width:100%;}
 					.here((users) => {
 
 						this.users = users
-					}).joining((user) =>{
 
-						console.log(user)
+					}).joining((user) =>{
+						
+						this.users.unshift(user)
 
 					}).leaving((user) => {
 
-						console.log(this.users)
+						for(let i = 0; i < this.users.length; i++){
+							if(this.users[i] === user){
+								this.users.splice(i, 1);
+							}
+						}
+						
 					}).listen('SendMessage', (e) => {
 						this.messages.push(e.message)
 					})

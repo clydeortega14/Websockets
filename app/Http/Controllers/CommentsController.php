@@ -7,6 +7,7 @@ use App\Comment;
 use Auth;
 use App\Post;
 use App\Events\NewComment;
+use App\Notifications\CommentPost;
 
 class CommentsController extends Controller
 {
@@ -20,7 +21,11 @@ class CommentsController extends Controller
     	]);
 
         $comment = Comment::where('id', $comment->id)->with('user')->first();
+        
         broadcast(new NewComment($comment))->toOthers();
+        
+        $comment->post->user->notify(new CommentPost($comment));
+
     	return response()->json($comment);
     }
     public function index(Post $post)

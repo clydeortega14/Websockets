@@ -1,40 +1,27 @@
 <template>
 	
-		<b-form>
-			<b-form-input
-				type="hidden"
-				id="post-id"
-			>
-				
-			</b-form-input>
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-md-12">
+				<h3>Post Title</h3>
+			</div>
+		</div>
 
+	</div>
 
-			<b-form-group>
-				<b-form-textarea
-					id="comment-body"
-					name="body"
-					v-model="commentBox"
-					placeholder="Enter Your Comment">
-
-				</b-form-textarea>
-			</b-form-group>
-
-		</b-form>
 
 </template>
 
 
 <script>
+
 	export default {
 
-		data(){
+		name : 'ShowPost',
+		mounted(){
 
-			return {
-
-				comments : {},
-				commentBox : '',
-				user : ''
-			}
+			console.log('Hello im inside the component')
 		}
+
 	}
 </script>

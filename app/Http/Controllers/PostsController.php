@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
+use App\User;
 use Illuminate\Support\Facades\DB;
+use Yajra\Datatables\Datatables;
 
 class PostsController extends Controller
 {
@@ -15,7 +17,7 @@ class PostsController extends Controller
      */
     public function index()
     {
-        //
+        return view('posts.index');
     }
 
     /**
@@ -75,6 +77,7 @@ class PostsController extends Controller
     public function show($id)
     {
         $post = Post::findOrFail($id);
+
         return view('posts.show', compact('post'));
     }
 
@@ -132,5 +135,29 @@ class PostsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function postData()
+    {
+        $posts = Post::with(['user']);
+
+        return datatables()
+            ->eloquent($posts)
+            ->addColumn('user', function(Post $post){
+
+                return $post->user->name;
+
+            })->addColumn('action', function(Post $post){
+
+                $url = route('posts.show', $post->id);
+                $editUrl = route('posts.edit', $post->id);
+
+                return "<a href='{$url}' class='btn btn-warning btn-sm'><i class='fas fa-eye'></i></a> | <a href='{$editUrl}' class='btn btn-primary btn-sm'> <i class='fas fa-edit'></i></a>";
+
+            })->addColumn('created_at', function(Post $post){
+
+                return $post->created_at->diffForHumans();
+            })
+            ->rawColumns(['user', 'action'])->make();
     }
 }

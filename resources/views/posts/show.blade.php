@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+
+
 <div class="container">
     <div class="row justify-content-start">
         <div class="col-md-12">
@@ -8,6 +10,8 @@
             <hr>
             <br>
             <p>{{ $post->body}}</p>
+            <br>
+            <small>Authored By : {{ $post->user->email }}</small>
             <hr>
         </div>
 
@@ -49,11 +53,11 @@
         </div>
     </div>
 </div>
-@endsection
+
+ @endsection
 
 
 @section('custom_js')
-
 <script>
 
     const app = new Vue({
@@ -82,15 +86,11 @@
                 })
             },
             postComment(){
-
-                axios.post(`/api/post/${this.post.id}/comment`, {
+                var postData = {
                     body : this.commentBox
-                },{
-                    headers : {
-                        'Authorization' : 'Bearer '+this.user.api_token,
-                        'Content-Type' : 'application/json'
-                    }
-                }).then( res => {
+                }
+
+                axios.post(`/api/post/${this.post.id}/comment`, postData).then( res => {
 
                     this.comments.unshift(res.data)
                     this.commentBox = ''
@@ -105,10 +105,14 @@
                     .listen('NewComment', (e) => {
                         this.comments.unshift(e.comment)
                     })
-            }
+
+                Echo.private(`App.User.${this.post.user_id}`)
+                    .notification((notification) => {
+                        console.log(notification)
+                    })
+            },
         }
     })
 </script>
-
 
 @endsection

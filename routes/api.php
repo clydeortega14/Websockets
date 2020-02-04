@@ -19,8 +19,10 @@ use Illuminate\Http\Request;
 
 Route::get('post/{post}/comments', 'CommentsController@index');
 
+Route::post('/login', 'AuthController@login');
+
 Route::group(['middleware' => 'auth:api'], function(){
-	
+
 	Route::post('post/{post}/comment', 'CommentsController@store');
 
 	Route::get('get-message', 'ChatsController@getMessage');
@@ -28,3 +30,14 @@ Route::group(['middleware' => 'auth:api'], function(){
 	Route::post('send-message', 'ChatsController@sendMessage');
 	
 });
+
+
+Route::get('/users', 'Api\UsersApiController@index');
+
+Route::post('/user', 'Api\UsersApiController@store');
+
+Route::get('/user/{id}', 'Api\UsersApiController@edit');
+
+Route::put('/user/{id}', 'Api\UsersApiController@update');
+
+Route::delete('/user/{id}', 'Api\UsersApiController@destroy');
