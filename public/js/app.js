@@ -1851,21 +1851,64 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Register",
   data: function data() {
     return {
       form: {
         name: '',
-        username: '',
+        email: '',
         password: '',
         confirm_password: ''
-      }
+      },
+      errors: []
     };
+  },
+  computed: {
+    nameState: function nameState() {
+      return this.form.name !== '' && this.form.name.length > 5 ? true : false;
+    },
+    emailState: function emailState() {
+      return this.form.email === '' ? false : true;
+    },
+    passwordState: function passwordState() {
+      return this.form.password !== '' && this.form.password.length > 6 ? true : false;
+    },
+    confirmState: function confirmState() {
+      return this.confirm_password !== '' && this.form.password !== '' && this.form.password === this.form.confirm_password ? true : false;
+    }
   },
   methods: {
     register: function register() {
-      console.log('register');
+      var _this = this;
+
+      this.errors = [];
+
+      if (this.nameState === false || this.emailState === false || this.passwordState === false || this.confirmState === false) {
+        this.errors.push("Please check the inputed values");
+      } else {
+        var payload = {
+          name: this.form.name,
+          email: this.form.email,
+          password: this.form.password
+        };
+        axios.post('http://realtime.test/api/register', payload).then(function (response) {
+          var data = response.data;
+
+          if (data.status === false) {
+            _this.errors.push(data.message.email); // this.emailState = false
+
+          }
+        })["catch"](function (error) {
+          return console.log(error);
+        });
+      }
     }
   }
 });
@@ -81318,7 +81361,7 @@ var render = function() {
             [
               _c(
                 "b-card",
-                { attrs: { header: "Register Now" } },
+                { attrs: { header: "Register Here" } },
                 [
                   _c(
                     "b-card-body",
@@ -81333,6 +81376,18 @@ var render = function() {
                           _c(
                             "b-col",
                             [
+                              _c(
+                                "ul",
+                                _vm._l(_vm.errors, function(error) {
+                                  return _c("li", [
+                                    _c("p", { staticClass: "text-danger" }, [
+                                      _vm._v(_vm._s(error))
+                                    ])
+                                  ])
+                                }),
+                                0
+                              ),
+                              _vm._v(" "),
                               _c(
                                 "b-form",
                                 {
@@ -81356,8 +81411,8 @@ var render = function() {
                                       _c("b-form-input", {
                                         attrs: {
                                           id: "name",
-                                          required: "",
-                                          placeholder: "Enter your Name"
+                                          placeholder: "Enter your Name",
+                                          state: _vm.nameState
                                         },
                                         model: {
                                           value: _vm.form.name,
@@ -81383,16 +81438,16 @@ var render = function() {
                                       _c("b-form-input", {
                                         attrs: {
                                           id: "username",
-                                          required: "",
                                           placeholder:
-                                            "Enter your username / email"
+                                            "Enter your username / email",
+                                          state: _vm.emailState
                                         },
                                         model: {
-                                          value: _vm.form.username,
+                                          value: _vm.form.email,
                                           callback: function($$v) {
-                                            _vm.$set(_vm.form, "username", $$v)
+                                            _vm.$set(_vm.form, "email", $$v)
                                           },
-                                          expression: "form.username"
+                                          expression: "form.email"
                                         }
                                       })
                                     ],
@@ -81413,7 +81468,7 @@ var render = function() {
                                           id: "input-password",
                                           type: "password",
                                           placeholder: "Enter your password",
-                                          required: ""
+                                          state: _vm.passwordState
                                         },
                                         model: {
                                           value: _vm.form.password,
@@ -81441,7 +81496,7 @@ var render = function() {
                                           id: "input-confirm-password",
                                           type: "password",
                                           placeholder: "Confirm password",
-                                          required: ""
+                                          state: _vm.confirmState
                                         },
                                         model: {
                                           value: _vm.form.confirm_password,

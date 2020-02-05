@@ -13,12 +13,11 @@ const actions = {
 	async retrieveToken({ commit }, payload){
 
 		let response = await axios.post(`http://realtime.test/api/login`, payload);
+		
 		let accessToken = 'Bearer ' + response.data.access_token
-
 		localforage.setItem('access_token', accessToken)
 		commit('setAccessToken', accessToken)
 	}
-
 };
 const mutations = {
 	setAccessToken (state, token) {
