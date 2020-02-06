@@ -94,17 +94,29 @@
 						password: this.form.password
 					}
 
-					axios.post('http://realtime.test/api/register', payload)
-					.then(response => {
-						let data = response.data;
-						
-						if(data.status === false){
+					return new Promise((resolve, reject) => {
 
-							this.errors.push(data.message.email);
-							// this.emailState = false
-						}
+						axios.post('http://realtime.test/api/register', payload)
+						.then(response => {
+							let data = response.data;
+							
+							if(data.status === false){
+
+								this.errors.push(data.message);
+							}else{
+
+								this.$router.push({ name: 'login'});
+								resolve(response)
+							}
+
+						}).catch(error => {
+							console.log(error)
+							reject(error)
+						});
+
 					})
-					.catch(error => console.log(error));
+
+					
 					
 				}
 				

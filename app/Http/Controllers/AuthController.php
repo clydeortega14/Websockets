@@ -13,25 +13,31 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-    	// Generate token
-        return $this->generateToken($request);
+
+        $auth = auth()->attempt(['email' => $request->username, 'password' => $request->password]);
+
+        if(!$auth){
+
+            return response()->json(['status' => false, 'message' => 'Invalid user'], 401);
+        }
+
+        $user = User::where('email', $request->username)->first();
+        $user_posts = $user->posts;
+
+        $user_data = ["user" => $user, "token" => $this->generateToken($request)];
+
+        return response()->json(['status' => true, 'user_data' => $user_data]);
     }
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
 
-            'email' => 'email|unique:users'
+        //check if email already exist
+        $email = User::where('email', $request->email)->first();
 
-        ]);
+        if(!is_null($email)){
 
-        if($validator->fails()){
-
-            return response()->json([
-                'status' => false,
-                'message' => $validator->errors()
-            ]);
+            return response()->json(['status' => false, 'message' => 'Email already exist']);
         }
-
 
         // Begin transaction
         DB::beginTransaction();
@@ -51,6 +57,15 @@ class AuthController extends Controller
         DB::commit();
 
         return response()->json(['status' => true, 'message' => 'successfully registered'], 200);
+    }
+
+    public function logout()
+    {
+        auth()->user()->tokens->each(function($token, $key){
+            $token->delete();
+        });
+
+        return response()->json('Logged Out successfully', 200);    
     }
 
     public function createUser(Array $data)

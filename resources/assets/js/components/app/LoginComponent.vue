@@ -49,16 +49,12 @@
 			...mapActions(['retrieveToken']),
 			login(){
 
-				let payload = {
-
-					username : this.form.username,
+				this.$store.dispatch('retrieveToken', {
+					username: this.form.username,
 					password: this.form.password
-				}
-
-				this.retrieveToken(payload);
-
-				this.form.username = ''
-				this.form.password = ''
+				}).then(response => {
+					this.$router.push({ name: 'home'})
+				})
 			}
 		}
 	}
