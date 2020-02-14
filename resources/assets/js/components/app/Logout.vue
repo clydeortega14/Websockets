@@ -10,7 +10,13 @@
 		created(){
 			this.$store.dispatch('destroyToken')
 			.then(res => {
-				this.$router.push({ name: 'login' })
+
+				this.$store.commit('destroyPost')
+
+				localforage.clear( () =>{
+					
+					this.$router.push({ name: 'login' })
+				})
 			})
 		}
 	}

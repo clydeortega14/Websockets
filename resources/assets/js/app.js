@@ -12,46 +12,20 @@ window.BootstrapVue = require('bootstrap-vue');
 
 import store from './store';
 import localforage from './libraries/localforage';
+import axios from './libraries/axios';
 import router from './router';
+import moment from 'moment';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
+export const bus = new Vue()
 
 Vue.use(BootstrapVue);
 
+window.bus = bus
 window.localforage = localforage
-
-
-/* FOR ROUTER NAVIGATION GUARDS */
-router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    // this route requires auth, check if logged in
-    // if not, redirect to login page.
-    if (!store.getters.loggedIn) {
-      next({
-        name: 'login',
-        // query: { redirect: to.fullPath }
-      })
-    } else {
-      next()
-    }
-  } else if (to.matched.some(record => record.meta.requiresVisitor)) {
-    // this route requires visitor, check if not logged in
-    // if logged in, redirect to home page.
-    if (store.getters.loggedIn) {
-      next({
-        name: 'home',
-        // query: { redirect: to.fullPath }
-      })
-    } else {
-      next()
-    }
-  }else {
-    next() // make sure to always call next()!
-  }
-})
-
-/* END ROUTER NAVIGATION GUARDS */
+window.axios = axios
+window.moment = moment
 
 
 /**
@@ -63,10 +37,14 @@ router.beforeEach((to, from, next) => {
 Vue.component('navbar-component', require('./components/app/NavbarComponent.vue').default);
 Vue.component('login-component', require('./components/app/LoginComponent.vue').default);
 Vue.component('show-post', require('./components/posts/ShowPost.vue').default);
+Vue.component('add-post', require('./components/posts/AddPost.vue').default);
+
+
 Vue.component('user-component', require('./components/users/User.vue').default);
 Vue.component('user-table', require('./components/users/UserTable.vue').default);
 Vue.component('add-user', require('./components/users/AddUser.vue').default);
 Vue.component('edit-user', require('./components/users/EditUser.vue').default);
+
 
 const app = new Vue({
     el: '#app',

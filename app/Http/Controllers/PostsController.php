@@ -48,7 +48,7 @@ class PostsController extends Controller
 
         try {
             
-            Post::create([
+            $post = Post::create([
                 'user_id' => auth()->user()->id,
                 'title' => $request->input('title'),
                 'body' => $request->input('body')
@@ -62,10 +62,7 @@ class PostsController extends Controller
 
         DB::commit();
 
-        return redirect()->route('home')->with('success', 'new post has been created');
-        
-
-
+        return response()->json($post);
     }
 
     /**
@@ -91,7 +88,7 @@ class PostsController extends Controller
     {
         $post = Post::findOrFail($id);
 
-        return view('posts.edit', compact('post'));
+        return response()->json($post);
     }
 
     /**
@@ -122,8 +119,9 @@ class PostsController extends Controller
 
         DB::commit();
         
+        return response()->json('successfully updated');
 
-        return redirect()->route('home')->with('success', 'Post has been updated');
+        // return redirect()->route('home')->with('success', 'Post has been updated');
     }
 
     /**
@@ -134,7 +132,20 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        DB::beginTransaction();
+        try {
+            
+            Post::where('id', $id)->delete();
+
+        } catch (Exception $e) {
+            
+            DB::rollback();
+
+            return response()->json($e->getMessage());
+        }
+        DB::commit();
+
+        return response()->json('successfully Deleted');
     }
 
     public function postData()

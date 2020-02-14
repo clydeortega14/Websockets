@@ -31,8 +31,6 @@
         </main>
     </div>
 
-    <!-- Scripts -->
-    {{-- <script src="{{ asset('js/jquery-3.4.1.min.js') }}"></script> --}}
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/bootstrap.js') }}"></script>
     <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>

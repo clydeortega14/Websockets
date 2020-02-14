@@ -7,10 +7,21 @@
 
 			<b-collapse id="nav-collapse" is-nav>
 				<b-navbar-nav class="ml-auto">
-					<b-nav-item :to="{ name: 'home' }">App</b-nav-item>
+					<b-nav-item v-if="loggedIn" :to="{ name: 'home' }">Home</b-nav-item>
+					<b-nav-item v-if="loggedIn" :to="{ name: 'posts' }">Posts</b-nav-item>
 					<b-nav-item v-if="!loggedIn" :to="{ name: 'login' }">Login</b-nav-item>
 					<b-nav-item v-if="!loggedIn" :to="{ name: 'register' }">Register</b-nav-item>
-					<b-nav-item v-if="loggedIn" :to="{ name: 'logout' }">Logout</b-nav-item>
+
+					<b-nav-item-dropdown
+						id="my-nav-dropdown"
+						:text="getName" 
+						v-if="loggedIn">
+
+						<b-dropdown-item>Profile</b-dropdown-item>
+						<b-dropdown-item>Settings</b-dropdown-item>
+						<b-dropdown-divider></b-dropdown-divider>
+						<b-dropdown-item :to="{ name: 'logout' }">Logout</b-dropdown-item>
+					</b-nav-item-dropdown>
 				</b-navbar-nav>
 			</b-collapse>
 		</b-navbar>
@@ -24,6 +35,6 @@
 
 	export default {
 		name: 'NavBar',
-		computed: mapGetters(['loggedIn']),
+		computed: mapGetters(['loggedIn', 'getName']),
 	}
 </script>

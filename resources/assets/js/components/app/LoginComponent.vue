@@ -29,8 +29,6 @@
 </template>
 
 <script>
-	
-	import { mapActions } from 'vuex';
 
 	export default {
 		name: 'LoginComponent',
@@ -46,15 +44,23 @@
 			}
 		},
 		methods: {
-			...mapActions(['retrieveToken']),
 			login(){
-
-				this.$store.dispatch('retrieveToken', {
+				let payload = {
 					username: this.form.username,
 					password: this.form.password
-				}).then(response => {
-					this.$router.push({ name: 'home'})
-				})
+				}
+
+				axios.post('http://realtime.test/api/login', payload)
+					.then(response => {
+						console.log(response.data)
+						
+						this.$store.commit('setAccessToken', response.data.user_data.token.access_token)
+						this.$store.commit('setName', response.data.user_data.user.name)
+						this.$store.commit('setUserPosts', response.data.user_data.user.posts)
+
+						this.$router.push({ name: 'home'})
+						
+					}).catch(error => console.log(error))
 			}
 		}
 	}

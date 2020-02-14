@@ -17,7 +17,6 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 
-Route::get('post/{post}/comments', 'CommentsController@index');
 
 Route::post('/login', 'AuthController@login');
 
@@ -27,10 +26,17 @@ Route::middleware('auth:api')->post('/logout', 'AuthController@logout');
 
 Route::group(['middleware' => 'auth:api'], function(){
 
+	/* POST ROUTES */
+	Route::post('post-add', 'PostsController@store');
+	Route::delete('post-delete/{id}', 'PostsController@destroy');
+	Route::get('post-edit/{id}', 'PostsController@edit');
+	Route::put('post-update/{post}', 'PostsController@update');
+	
+	/*POST COMMENT ROUTES*/
+	Route::get('post/{post}/comments', 'CommentsController@index');
 	Route::post('post/{post}/comment', 'CommentsController@store');
 
 	Route::get('get-message', 'ChatsController@getMessage');
-	
 	Route::post('send-message', 'ChatsController@sendMessage');
 	
 });
