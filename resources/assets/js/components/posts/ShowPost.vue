@@ -7,7 +7,11 @@
 			</b-col>
 
 			<div class="col-md-12">
-				<b-card :title="post.title" v-for="post in userPosts" :key="post.id" class="mt-3">
+				<b-card 
+					:title="post.title" 
+					v-for="post in userPosts" 
+					:key="post.id" 
+					class="mt-3">
 					<b-card-text>{{ post.body }}</b-card-text>
 					<br>
 					<b-card-text>Posted by: {{  getName }}</b-card-text>

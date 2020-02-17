@@ -13,7 +13,6 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-
         $auth = auth()->attempt(['email' => $request->username, 'password' => $request->password]);
 
         if(!$auth){

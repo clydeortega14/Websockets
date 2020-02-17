@@ -13,7 +13,6 @@ const actions = {
 	async addPost({ commit }, payload)
 	{
 		let response = await axios.post('api/post-add', payload);
-
 		commit('addPost', response.data)
 	},
 	async deletePost({ commit }, id){
@@ -30,7 +29,6 @@ const actions = {
 		return new Promise((resolve, reject) => {
 			axios.get(`api/post-edit/${id}`)
 			.then(response => {
-				commit('getPost', response.data)
 				resolve(response.data)
 			}).catch(error => {
 				reject(error)
@@ -62,9 +60,6 @@ const mutations = {
 			// remove one item and replace that removed item to new item
 			state.posts.splice(index, 1, data)
 		}
-	},
-	getPost(state, id){
-		state.posts = state.posts.filter(post => post.id === id)
 	}
 }
 

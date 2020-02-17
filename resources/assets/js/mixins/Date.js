@@ -7,6 +7,9 @@ export default {
 			let objDate = date ? moment(date) : moment()
 
 			return objDate.format('MM/DD/YYYY')
+		},
+		relativeDate(date){
+			return date ? moment(date).fromNow() : moment() 
 		}
 	}
 }

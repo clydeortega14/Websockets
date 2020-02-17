@@ -52,8 +52,8 @@
 
 				axios.post('http://realtime.test/api/login', payload)
 					.then(response => {
-						console.log(response.data)
-						
+						console.log(response.data.user_data.token)
+
 						this.$store.commit('setAccessToken', response.data.user_data.token.access_token)
 						this.$store.commit('setName', response.data.user_data.user.name)
 						this.$store.commit('setUserPosts', response.data.user_data.user.posts)

@@ -47,17 +47,28 @@ class PostsController extends Controller
         DB::beginTransaction();
 
         try {
+
+            $file = '';
+
+            if($request->has('file')){
+                
+                $file = $request->file('file');
+                $filename = rand().".".$file->getClientOriginalExtension();
+                $file->storeAs('/post_files', $filename);
+            }
             
             $post = Post::create([
                 'user_id' => auth()->user()->id,
                 'title' => $request->input('title'),
-                'body' => $request->input('body')
+                'body' => $request->input('body'),
+                'file' => $filename
             ]);
 
         } catch (Exception $e) {
             
             DB::rollback();
-            return back();
+
+            return response()->json(['status' => false, 'message' => $e->getMessage()]);
         }
 
         DB::commit();

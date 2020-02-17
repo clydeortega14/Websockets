@@ -17,6 +17,7 @@
 								<img class="mr-3 mb-3" src="http://placeimg.com/80/80" alt="...">
 							</template>
 							<h5 class="mt-0 mb-1">{{ comment.user.name }}</h5>
+							<p><small class="text-muted">{{ relativeDate(comment.created_at) }}</small></p>
 							<p class="mb-0">
 								{{ comment.comment }}
 							</p>
@@ -43,9 +44,11 @@
 <script>
 	
 	import { mapGetters, mapActions } from 'vuex'
+	import DateFormat from '../../mixins/Date.js'
 
 	export default {
 		name: "CommentPost",
+		mixins: [ DateFormat ],
 		data(){
 			return { 
 
@@ -59,14 +62,13 @@
 			...mapGetters(['getComments']),
 		},
 		created(){
-			this.singlePost()
+			//GET SINGLE POST
+			this.getPost(this.$route.params.id).then(res => this.post = res)
+			// GET POST COMMENTS
 			this.fetchComments(this.$route.params.id)
 		},
 		methods: {
 			...mapActions(['fetchComments', 'addComment', 'getPost']),
-			singlePost(){
-				this.getPost(this.$route.params.id).then(res => this.post = res)
-			},
 			add(){
 
 				let payload = {
