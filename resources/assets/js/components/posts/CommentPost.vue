@@ -3,7 +3,13 @@
 		<b-container>
 			<b-row no-gutters>
 				<b-col md="12">
-					<h3>{{ post.title }}</h3>
+					<h1>{{ post.title }}</h1>
+					<p>by <a href="">{{ post.user.name }}</a></p>
+					<hr>
+					<p>Posted on {{ fullDate(post.created_at) }}</p>
+					<hr>
+					<img src="https://picsum.photos/id/1/1100/300" alt="..." class="round">
+					<hr>
 					<p>{{ post.body }}</p>
 				</b-col>
 				

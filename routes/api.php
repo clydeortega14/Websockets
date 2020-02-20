@@ -27,6 +27,7 @@ Route::middleware('auth:api')->post('/logout', 'AuthController@logout');
 Route::group(['middleware' => 'auth:api'], function(){
 
 	/* POST ROUTES */
+	Route::get('post-all', 'PostsController@all');
 	Route::post('post-add', 'PostsController@store');
 	Route::delete('post-delete/{id}', 'PostsController@destroy');
 	Route::get('post-edit/{id}', 'PostsController@edit');

@@ -30,6 +30,11 @@ class PostsController extends Controller
         return view('posts.create');
     }
 
+    public function all(Post $post)
+    {
+        return response()->json($post->with(['user', 'comments'])->get());
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -97,7 +102,7 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        $post = Post::findOrFail($id);
+        $post = Post::where('id', $id)->with(['user', 'comments'])->first();
 
         return response()->json($post);
     }

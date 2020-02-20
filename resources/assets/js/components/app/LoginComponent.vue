@@ -3,7 +3,7 @@
 		<b-container>
 			<b-row no-gutters class="justify-content-md-center">
 				<b-col sm="6">
-					<b-card header="Login Here">
+					<b-card no-body class="login">
 						<b-card-body>
 							<b-row no-gutters class="justify-content-md-center">
 								<b-col>
@@ -52,8 +52,6 @@
 
 				axios.post('http://realtime.test/api/login', payload)
 					.then(response => {
-						console.log(response.data.user_data.token)
-
 						this.$store.commit('setAccessToken', response.data.user_data.token.access_token)
 						this.$store.commit('setName', response.data.user_data.user.name)
 						this.$store.commit('setUserPosts', response.data.user_data.user.posts)
@@ -65,3 +63,12 @@
 		}
 	}
 </script>
+
+<style scoped>
+	.login {
+
+		margin: 50px auto;
+		margin-top: 100px;
+	}
+
+</style>
