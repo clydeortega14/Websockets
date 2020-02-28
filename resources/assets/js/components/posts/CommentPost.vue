@@ -4,11 +4,11 @@
 			<b-row no-gutters>
 				<b-col md="12">
 					<h1>{{ post.title }}</h1>
-					<p>by <a href="">{{ post.user.name }}</a></p>
+					by <span class="text-success">{{ post.user.name }}</span>
 					<hr>
 					<p>Posted on {{ fullDate(post.created_at) }}</p>
 					<hr>
-					<img src="https://picsum.photos/id/1/1100/300" alt="..." class="round">
+					<img src="https://picsum.photos/id/1/1100/300" alt="..." class="rounded">
 					<hr>
 					<p>{{ post.body }}</p>
 				</b-col>
@@ -20,12 +20,12 @@
 					<ul class="list-unstyled">
 						<b-media tag="li" v-for="comment in getComments" :key="comment.id">
 							<template v-slot:aside>
-								<img class="mr-3 mb-3" src="http://placeimg.com/80/80" alt="...">
+								<img class="mr-2 mb-3 rounded-circle" src="http://placeimg.com/50/50" alt="...">
 							</template>
-							<h5 class="mt-0 mb-1">{{ comment.user.name }}</h5>
-							<p><small class="text-muted">{{ relativeDate(comment.created_at) }}</small></p>
-							<p class="mb-0">
-								{{ comment.comment }}
+							<span class="mt-0 mb-1">{{ comment.user.name }}</span>
+							<p>
+								<small class="text-muted mr-2">{{ relativeDate(comment.created_at) }}</small> <br>	
+								<span class="mb-0">{{ comment.comment }}</span>
 							</p>
 						</b-media>
 					</ul>
@@ -37,9 +37,7 @@
 							<b-form-textarea id="comment" v-model="form.comment" placeholder="Enter your comment here..." rows="4" max-rows="6"></b-form-textarea>
 						</b-form-group>
 
-						<div class="float-right">
-							<b-button type="submit" variant="success">Add Comment</b-button>
-						</div>
+						<b-button type="submit" variant="primary">Add Comment</b-button>
 					</b-form>
 				</b-col>
 			</b-row>
@@ -69,7 +67,10 @@
 		},
 		created(){
 			//GET SINGLE POST
-			this.getPost(this.$route.params.id).then(res => this.post = res)
+			this.getPost(this.$route.params.id).then(res => {
+				this.post = res
+				
+			})
 			// GET POST COMMENTS
 			this.fetchComments(this.$route.params.id)
 		},

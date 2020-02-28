@@ -5,11 +5,11 @@ import store from '../store';
 Vue.use(VueRouter);
 
 const router = new VueRouter({
-	mode: 'hash',
+	mode: 'history',
 	routes : [
 		{
 			name: 'login',
-			path: '/',
+			path: '/login',
 			component: require('../components/app/LoginComponent.vue').default,
 			meta: {
 				requiresVisitor: true
@@ -27,10 +27,10 @@ const router = new VueRouter({
 
 		{
 			name: 'home',
-			path: '/home',
+			path: '/',
 			component: require('../components/app/Home.vue').default,
 			meta: {
-				requiresAuth: true
+				requiresVisitor: true
 			}
 		},
 		{
@@ -53,6 +53,14 @@ const router = new VueRouter({
 			name: 'comment-post',
 			path: '/comment-post/:id',
 			component: require('../components/posts/CommentPost.vue').default,
+			meta: {
+				requiresAuth: true
+			}
+		},
+		{
+			name: 'profile',
+			path: '/profile/:id',
+			component: require('../components/users/Profile.vue').default,
 			meta: {
 				requiresAuth: true
 			}

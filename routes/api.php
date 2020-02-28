@@ -19,15 +19,17 @@ use Illuminate\Http\Request;
 
 
 Route::post('/login', 'AuthController@login');
-
 Route::post('/register', 'AuthController@register');
+Route::get('post-all', 'PostsController@all');
 
 Route::middleware('auth:api')->post('/logout', 'AuthController@logout');
 
 Route::group(['middleware' => 'auth:api'], function(){
 
+	/* Categories */
+	Route::get('categories', 'CategoriesController@allCategories');
+
 	/* POST ROUTES */
-	Route::get('post-all', 'PostsController@all');
 	Route::post('post-add', 'PostsController@store');
 	Route::delete('post-delete/{id}', 'PostsController@destroy');
 	Route::get('post-edit/{id}', 'PostsController@edit');

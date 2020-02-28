@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    protected $fillable = ['user_id', 'title', 'body', 'file'];
+    protected $fillable = ['category_id', 'user_id', 'title', 'body', 'file'];
 
     public function user()
     {
@@ -15,5 +15,9 @@ class Post extends Model
     public function comments()
     {
     	return $this->hasMany('App\Comment', 'post_id', 'id');
+    }
+    public function category()
+    {
+    	return $this->belongsTo('App\Category', 'category_id', 'id');
     }
 }

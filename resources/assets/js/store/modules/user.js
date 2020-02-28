@@ -2,12 +2,14 @@ const state = () => ({
 
 	token: null,
 	name: null,
+	user: {}
 })
 const getters = {
 	getToken (state)
 	{
 		return state.token
 	},
+	getUser: state => state.user,
 	getName(state)
 	{
 		return state.name
@@ -44,6 +46,7 @@ const mutations = {
 	setAccessToken (state, token) {
 		state.token = token
 	},
+	setUser: (state, user) => (state.user = user),
 	setName(state, name)
 	{
 		state.name = name
@@ -52,6 +55,7 @@ const mutations = {
 	{
 		state.name = null
 		state.token = null
+		state.user = {}
 	}
 };
 

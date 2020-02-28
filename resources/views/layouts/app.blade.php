@@ -18,6 +18,15 @@
     <!-- Custom Css -->
     <link rel="stylesheet" type="text/css" href="css/style.css">
 
+    <style>
+        
+        #app {
+
+            background-color: lightblue;
+        }
+
+    </style>
+
     @yield('custom_css')
 
 </head>

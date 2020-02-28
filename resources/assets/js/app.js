@@ -16,6 +16,8 @@ import axios from './libraries/axios';
 import router from './router';
 import moment from 'moment';
 
+import App from './views/App.vue';
+
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 export const bus = new Vue()
@@ -49,5 +51,6 @@ Vue.component('edit-user', require('./components/users/EditUser.vue').default);
 const app = new Vue({
     el: '#app',
     store,
-    router
+    components: { App },
+    router,
 });

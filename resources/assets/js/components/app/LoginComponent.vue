@@ -54,9 +54,10 @@
 					.then(response => {
 						this.$store.commit('setAccessToken', response.data.user_data.token.access_token)
 						this.$store.commit('setName', response.data.user_data.user.name)
+						this.$store.commit('setUser', response.data.user_data.user)
 						this.$store.commit('setUserPosts', response.data.user_data.user.posts)
 
-						this.$router.push({ name: 'home'})
+						this.$router.push({ name: 'posts'})
 						
 					}).catch(error => console.log(error))
 			}

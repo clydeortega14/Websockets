@@ -7,9 +7,11 @@ use App\Post;
 use App\User;
 use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
+use App\Traits\FileTrait;
 
 class PostsController extends Controller
 {
+    use FileTrait;
     /**
      * Display a listing of the resource.
      *
@@ -42,41 +44,10 @@ class PostsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        $this->validate($request, [
+    {  
+        $filename = $this->manageFile($request->file, 'file/uploads/posts');
 
-            'title' => 'required',
-            'body' => 'required'
-        ]);
-
-        DB::beginTransaction();
-
-        try {
-
-            $file = '';
-
-            if($request->has('file')){
-                
-                $file = $request->file('file');
-                $filename = rand().".".$file->getClientOriginalExtension();
-                $file->storeAs('/post_files', $filename);
-            }
-            
-            $post = Post::create([
-                'user_id' => auth()->user()->id,
-                'title' => $request->input('title'),
-                'body' => $request->input('body'),
-                'file' => $filename
-            ]);
-
-        } catch (Exception $e) {
-            
-            DB::rollback();
-
-            return response()->json(['status' => false, 'message' => $e->getMessage()]);
-        }
-
-        DB::commit();
+        $post = Post::create($request->except('file') + ['user_id' => auth()->user()->id, 'file' => $filename]);
 
         return response()->json($post);
     }

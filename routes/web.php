@@ -11,25 +11,29 @@
 |
 */
 
-Route::get('/', function () {
+// Route::get('/', function () {
 
-    return view('auth/login');
+//     return view('auth/login');
     
-});
+// });
 
-Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
 
-Route::resource('posts', 'PostsController');
+// Auth::routes();
 
-Route::resource('users', 'UserController');
+// Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('chats', 'ChatsController@index')->name('chats.index');
+// Route::resource('posts', 'PostsController');
 
-Route::get('read-notifications/{id}', 'NotificationsController@markRead')->name('read.notifications');
+// Route::resource('users', 'UserController');
 
-Route::get('post-data', 'PostsController@postData');
+// Route::get('chats', 'ChatsController@index')->name('chats.index');
+
+// Route::get('read-notifications/{id}', 'NotificationsController@markRead')->name('read.notifications');
+
+// Route::get('post-data', 'PostsController@postData');
 
 // Route::post('send-message', 'ChatsController@sendMessage')->name('send.message');
+
+Route::get('/{any}', 'SinglePageController@index')->where('any', '.*');
 

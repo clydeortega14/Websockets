@@ -1,8 +1,15 @@
 <template>
-	<div>
+	<div class="py-4">
 
 		<b-form @submit.prevent="addNewPost" enctype="multipart/form-data">
-			<b-card header="add new post" header-tag="header" footer-tag="footer" class="mb-5">
+			<b-card class="mb-5">
+				<b-form-group
+					label="Categories"
+					label-for="category_id">
+					<b-form-select v-model="form.category_id" :options="allCategories"></b-form-select>
+					
+				</b-form-group>
+
 				<b-form-group
 					label="Title"
 					label-for="title">
@@ -17,16 +24,18 @@
 					<b-form-textarea id="body" v-model="form.body" placeholder="Enter body" rows="6" max-rows="6"></b-form-textarea>
 				</b-form-group>
 
-				<template v-slot:footer>
-					<label>
-						<i class="fa fa-camera"></i> Add Photo
-						<input type="file" ref="file" id="file" style="visibility:hidden;" @change="handleFileUpload">
-					</label>
-					<div class="float-right">
-						<b-button type="submit" variant="light">Submit</b-button>
-						<b-button variant="light">Cancel</b-button>
-					</div>
-				</template>
+				<div class="form-group">
+					<input type="file" ref="file" id="file" @change="handleFileUpload">
+				</div>
+				<br>
+				<div v-if="this.form.file !== '' ">
+					<img :src="this.form.file" alt="..." width="300" height="300" class="img-circle">
+				</div>
+
+				<div class="float-right">
+					<button type="submit" class="btn btn-primary">Create</button>
+					<button type="button" class="btn btn-danger">Cancel</button>
+				</div>
 			</b-card>
 		</b-form>
 	</div>
@@ -34,7 +43,7 @@
 
 <script>
 
-	import { mapActions } from 'vuex'
+	import { mapActions, mapGetters } from 'vuex'
 
 	export default {
 		name:"AddPost",
@@ -42,12 +51,17 @@
 			return {
 				form: {
 					id: null,
+					category_id: null,
 					title: '',
 					body: '',
 					file: ''
 				},
 				mode: 'creating',
 			}
+		},
+		computed: mapGetters(['allCategories']),
+		created(){
+			this.getCategories()
 		},
 		mounted(){
 
@@ -60,14 +74,25 @@
 			})
 		},
 		methods: {
-			...mapActions(['addPost', 'updatePost']),
-			handleFileUpload(){
-				this.form.file = this.$refs.file.files[0]
+			...mapActions(['addPost', 'updatePost', 'getCategories']),
+			handleFileUpload(e){
+
+				// this.form.file = this.$refs.file.files[0]
+				//create new instance of file reader
+				var fileReader = new FileReader()
+				//read file reader as Data URL
+				fileReader.readAsDataURL(e.target.files[0])
+				//when the file reader loads
+				fileReader.onload = (e) => {
+					//assign the form.file to the event target result
+					this.form.file = e.target.result
+				}
 			},
 			addNewPost(){
 
 
 				let formData = new FormData()
+				formData.append('category_id', this.form.category_id)
 				formData.append('title', this.form.title)
 				formData.append('body', this.form.body)
 				formData.append('file', this.form.file)
