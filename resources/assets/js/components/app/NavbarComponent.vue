@@ -14,7 +14,7 @@
 
 					<b-nav-item-dropdown
 						id="my-nav-dropdown"
-						:text="getName" 
+						:text="getUser.name" 
 						v-if="loggedIn">
 
 						<b-dropdown-item :to="{ name: 'profile', params: { id: getUser.id } }">Profile</b-dropdown-item>
@@ -35,6 +35,6 @@
 
 	export default {
 		name: 'NavBar',
-		computed: mapGetters(['loggedIn', 'getName', 'getUser']),
+		computed: mapGetters(['loggedIn','getUser']),
 	}
 </script>

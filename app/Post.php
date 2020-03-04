@@ -20,4 +20,8 @@ class Post extends Model
     {
     	return $this->belongsTo('App\Category', 'category_id', 'id');
     }
+    public function likes()
+    {
+        return $this->hasMany('App\Like', 'post_id', 'id');
+    }
 }

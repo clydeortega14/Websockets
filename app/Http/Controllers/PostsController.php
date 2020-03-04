@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Post;
 use App\User;
+use App\Like;
 use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
 use App\Traits\FileTrait;
@@ -46,10 +47,31 @@ class PostsController extends Controller
     public function store(Request $request)
     {  
         $filename = $this->manageFile($request->file, 'file/uploads/posts');
-
-        $post = Post::create($request->except('file') + ['user_id' => auth()->user()->id, 'file' => $filename]);
-
+        $post     = Post::create($request->except('file') + ['user_id' => auth()->user()->id, 'file' => $filename]);
         return response()->json($post);
+    }
+    public function likePost(Request $request)
+    {
+        $dup_like = Like::where('user_id', auth()->user()->id)->where('post_id', $request->post_id)->first();
+
+        if(!is_null($dup_like)){
+           $dup_like->delete();
+
+           return response()->json($this->postLikes($request));
+           
+        }else{
+
+            Like::create([
+                'user_id' => auth()->user()->id,
+                'post_id' => $request->post_id
+            ]);
+
+            return response()->json($this->postLikes($request));
+        }
+    }
+    public function postLikes(Request $request){
+
+        return Post::where('id', $request->post_id)->with(['likes'])->first();
     }
 
     /**

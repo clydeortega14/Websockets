@@ -34,12 +34,22 @@ const actions = {
 				reject(error)
 			})
 		})
+	},
+	async likePost({ commit }, post)
+	{
+		const response = await axios.post('/api/like', { post_id : post.id });
+		// console.log(response.data)
+		commit('setPostLikes', response.data)
 	}
-
 }
 const mutations = {
 	setUserPosts(state, posts){
 		state.posts = posts
+	},
+	setPostLikes(state, data)
+	{
+		let findPost = state.posts.find(post => post.id === data.id)
+		findPost.likes = data.likes
 	},
 	destroyPost(state){
 		state.posts = []

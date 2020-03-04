@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Post;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use DB;
@@ -21,9 +22,13 @@ class AuthController extends Controller
         }
 
         $user = User::where('email', $request->username)->first();
-        $user_posts = $user->posts;
+        $user_posts = Post::where('user_id', $user->id)->with(['comments', 'likes'])->get();
 
-        $user_data = ["user" => $user, "token" => $this->generateToken($request)];
+        $user_data = [
+            "user" =>  $user,
+            "user_posts" => $user_posts, 
+            "token" => $this->generateToken($request)
+        ];
 
         return response()->json(['status' => true, 'user_data' => $user_data]);
     }
@@ -89,9 +94,9 @@ class AuthController extends Controller
 
                 'form_params' => [
 
-                    'grant_type' => 'password',
-                    'client_id' => config('services.passport.client_id'),
-                    'client_secret' => config('services.passport.client_secret'),
+                    'grant_type' => $request->grant_type,
+                    'client_id' => $request->client_id,
+                    'client_secret' => $request->client_secret,
                     'username' => $request->username,
                     'password' => $request->password
                 ],
