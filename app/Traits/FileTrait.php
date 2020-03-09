@@ -36,4 +36,31 @@ trait FileTrait {
 
         return $filename;
 	}
+    public function manageImage($image, $dir)
+    {
+        $filename = str_random().'.'.$image->getClientOriginalExtension();
+        $img = Image::make($image)->resize(300, 200);
+
+        if(!file_exists($dir)){
+            mkdir($dir, 0755, true);
+        }
+        $path = public_path($dir).'/'.$filename;
+        $img->save($path);
+
+        return $filename;
+    }
+    public function manageArrayImages(array $images)
+    {
+        if(count($images) > 1){
+
+            $image = implode("|", $images);
+
+        }else{
+            foreach($images as $arr_img){
+                $image = $arr_img;
+            }
+        }
+
+        return $image;
+    }
 }

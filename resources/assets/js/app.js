@@ -40,6 +40,7 @@ Vue.component('navbar-component', require('./components/app/NavbarComponent.vue'
 Vue.component('login-component', require('./components/app/LoginComponent.vue').default);
 Vue.component('show-post', require('./components/posts/ShowPost.vue').default);
 Vue.component('add-post', require('./components/posts/AddPost.vue').default);
+Vue.component('upload-file', require('./components/posts/modal/UploadFile.vue').default);
 
 
 Vue.component('user-component', require('./components/users/User.vue').default);

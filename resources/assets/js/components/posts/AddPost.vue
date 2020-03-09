@@ -89,8 +89,7 @@
 				}
 			},
 			addNewPost(){
-
-
+				
 				let formData = new FormData()
 				formData.append('category_id', this.form.category_id)
 				formData.append('title', this.form.title)

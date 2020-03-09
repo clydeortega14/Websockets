@@ -4,16 +4,20 @@ const state = () => ({
 })
 const getters = {
 
-	userPosts(state){
-		return state.posts
-	}
+	getPosts: state => state.posts 
 }
 const actions = {
 
+	async getAllPosts({ commit })
+	{
+		let response = await axios.get('/api/post-all');
+		commit('setPosts', response.data)
+	},
 	async addPost({ commit }, payload)
 	{
-		let response = await axios.post('api/post-add', payload);
-		commit('addPost', response.data)
+		let response = await axios.post('/api/post-add', payload);
+		console.log(response.data)
+		// commit('addPost', response.data)
 	},
 	async deletePost({ commit }, id){
 
@@ -43,9 +47,7 @@ const actions = {
 	}
 }
 const mutations = {
-	setUserPosts(state, posts){
-		state.posts = posts
-	},
+	setPosts: (state, posts) => (state.posts = posts),
 	setPostLikes(state, data)
 	{
 		let findPost = state.posts.find(post => post.id === data.id)

@@ -55,12 +55,12 @@
 
 				axios.post('http://realtime.test/api/login', payload)
 					.then(response => {
-						// console.log(response.data)
+						
 						this.$store.commit('setAccessToken', response.data.user_data.token.access_token)
 						this.$store.commit('setUser', response.data.user_data.user)
 						this.$store.commit('setUserPosts', response.data.user_data.user_posts)
 
-						this.$router.push({ name: 'posts'})
+						this.$router.push({ name: 'profile', params: { id: response.data.user_data.user.id}})
 						
 					}).catch(error => console.log(error))
 			}

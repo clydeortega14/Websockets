@@ -18,7 +18,7 @@
 								<i class="fa fa-users"></i> Friends ( 64 )
 							</b-list-group-item>
 							<b-list-group-item href="#">
-								<i class="fa fa-comments"></i> Posts ( {{ userPosts.length }} )
+								<i class="fa fa-comments"></i> Posts ( 0 )
 							</b-list-group-item>
 						</b-list-group>
 					</b-card>
@@ -45,6 +45,7 @@
 					<b-row class="mb-3">
 						<b-col sm="12">
 							<b-button-group>
+
 						    	<b-button variant="light">
 						    		<i class="fa fa-address-book"></i>
 						    		<span>Status</span>
@@ -60,15 +61,7 @@
 						    		<span>Video</span>
 						    	</b-button>
 
-						    	<b-modal id="bv-modal-example" hide-footer>
-								    <template v-slot:modal-title>
-								      	Update new post
-								    </template>
-								    <div class="d-block text-center">
-								      <h3>Hello From This Modal!</h3>
-								    </div>
-								    <b-button class="mt-3" block @click="$bvModal.hide('bv-modal-example')">Close Me</b-button>
-							 	</b-modal>
+						    	<upload-file></upload-file>
 
 						    </b-button-group>
 						</b-col>
@@ -86,7 +79,7 @@
 						</b-col>
 					</b-row>
 
-					<b-card no-body class="mb-3" v-for="(post, index) in userPosts" :key="index">
+					<b-card no-body class="mb-3" v-for="(post, index) in getUserPosts" :key="index">
 						<ul class="list-unstyled">
 							<b-media tag="li" class="my-4">
 								<template v-slot:aside>
@@ -104,11 +97,11 @@
 										</div>
 										<p>{{ post.body }}</p>
 										<br>
-										<p v-if="post.likes.length > 0" class="text-muted"> {{ post.likes.length }} people likes </p>
+										<p v-if="post.likes.length > 0" class="text-muted"> {{ post.likes.length }}  people likes </p>
 										<hr>
 										<b-row class="mb-3">
 											<b-col>
-												<b-button type="submit" variant="light" size="sm" @click.prevent="likePost(post)"><i class="fa fa-thumbs-up"></i> <span class="text-success">{{ post.likes.length }}</span> likes </b-button> | 
+												<b-button type="submit" variant="light" size="sm" @click.prevent="likePost(post)"><i class="fa fa-thumbs-up"></i> <span class="text-success"></span> {{ post.likes.length }} likes </b-button> | 
 												<b-button variant="light" size="sm"><i class="fa fa-comments"></i> {{ post.comments.length }} comments </b-button>
 											</b-col>
 										</b-row>
@@ -133,15 +126,18 @@
 		name: "Profile",
 		data(){
 			return {
-				likes: 0
+				user_posts: []
 			}
 		},
 		mixins: [ DateFormat ],
 		computed: {
-			...mapGetters(['userPosts', 'getUser'])
+			...mapGetters(['getUserPosts', 'getUser'])
 		},
 		methods: {
 			...mapActions(['likePost'])
+		},
+		created(){
+			this.getUserPosts
 		}
 	}
 </script>

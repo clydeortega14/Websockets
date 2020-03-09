@@ -9,6 +9,7 @@ use App\Like;
 use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
 use App\Traits\FileTrait;
+use Image;
 
 class PostsController extends Controller
 {
@@ -35,7 +36,7 @@ class PostsController extends Controller
 
     public function all(Post $post)
     {
-        return response()->json($post->with(['user', 'comments'])->get());
+        return response()->json($post->with(['user', 'comments', 'likes'])->get());
     }
 
     /**
@@ -46,8 +47,28 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {  
-        $filename = $this->manageFile($request->file, 'file/uploads/posts');
-        $post     = Post::create($request->except('file') + ['user_id' => auth()->user()->id, 'file' => $filename]);
+        $data = $request->except('files');
+
+        if($request->hasFile('files')){
+
+            $files = $request->file('files');
+            $dir = 'file/uploads/posts';
+            $arr_images = [];
+
+            foreach($files as $file){
+                $arr_images[] = $this->manageImage($file, $dir);
+            }
+            $image = $this->manageArrayImages($arr_images);
+
+        }else{
+
+            $image = '';
+        }
+
+        // $new = $data + ['file' => $image, 'user_id' => auth()->user()->id];
+        // return response()->json($new);
+
+        $post = Post::create($data + ['file' => $image, 'user_id' => auth()->user()->id]);
         return response()->json($post);
     }
     public function likePost(Request $request)
