@@ -41,6 +41,11 @@ Vue.component('login-component', require('./components/app/LoginComponent.vue').
 Vue.component('show-post', require('./components/posts/ShowPost.vue').default);
 Vue.component('add-post', require('./components/posts/AddPost.vue').default);
 Vue.component('upload-file', require('./components/posts/modal/UploadFile.vue').default);
+Vue.component('new-post', require('./components/posts/NewPost.vue').default);
+Vue.component('post-comments', require('./components/comments/PostComments.vue').default);
+Vue.component('add-comment', require('./components/comments/AddComment.vue').default);
+Vue.component('edit-post', require('./components/posts/modal/EditPost.vue').default);
+Vue.component('post-image', require('./components/posts/sub-components/PostImage.vue').default);
 
 
 Vue.component('user-component', require('./components/users/User.vue').default);

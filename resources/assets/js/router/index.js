@@ -30,7 +30,7 @@ const router = new VueRouter({
 			path: '/',
 			component: require('../components/app/Home.vue').default,
 			meta: {
-				requiresVisitor: true
+				requiresAuth: true
 			}
 		},
 		{

@@ -21,12 +21,10 @@ class AuthController extends Controller
             return response()->json(['status' => false, 'message' => 'Invalid user'], 401);
         }
 
-        $user = User::where('email', $request->username)->first();
-        $user_posts = Post::where('user_id', $user->id)->with(['comments', 'likes'])->get();
+        $user = User::where('email', $request->username)->with(['posts.user', 'posts.likes', 'posts.comments'])->first();
 
         $user_data = [
             "user" =>  $user,
-            "user_posts" => $user_posts, 
             "token" => $this->generateToken($request)
         ];
 

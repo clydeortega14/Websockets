@@ -33,7 +33,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 	Route::post('post-add', 'PostsController@store');
 	Route::delete('post-delete/{id}', 'PostsController@destroy');
 	Route::get('post-edit/{id}', 'PostsController@edit');
-	Route::put('post-update/{post}', 'PostsController@update');
+	Route::post('post-update/{post}', 'PostsController@update');
 
 	Route::post('like', 'PostsController@likePost');
 	

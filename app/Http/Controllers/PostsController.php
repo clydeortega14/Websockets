@@ -36,7 +36,9 @@ class PostsController extends Controller
 
     public function all(Post $post)
     {
-        return response()->json($post->with(['user', 'comments', 'likes'])->get());
+        $allPosts = $post->with(['user', 'comments.user', 'likes'])->orderBy('created_at', 'desc')->get();
+
+        return response()->json($allPosts);
     }
 
     /**
@@ -49,26 +51,12 @@ class PostsController extends Controller
     {  
         $data = $request->except('files');
 
-        if($request->hasFile('files')){
+        $image = $this->checkFile($request);
 
-            $files = $request->file('files');
-            $dir = 'file/uploads/posts';
-            $arr_images = [];
+        $newPost = Post::create($data + ['file' => $image, 'user_id' => auth()->user()->id]);
 
-            foreach($files as $file){
-                $arr_images[] = $this->manageImage($file, $dir);
-            }
-            $image = $this->manageArrayImages($arr_images);
+        $post = Post::where('id', $newPost->id)->with(['user', 'comments', 'likes'])->first();
 
-        }else{
-
-            $image = '';
-        }
-
-        // $new = $data + ['file' => $image, 'user_id' => auth()->user()->id];
-        // return response()->json($new);
-
-        $post = Post::create($data + ['file' => $image, 'user_id' => auth()->user()->id]);
         return response()->json($post);
     }
     public function likePost(Request $request)
@@ -76,18 +64,21 @@ class PostsController extends Controller
         $dup_like = Like::where('user_id', auth()->user()->id)->where('post_id', $request->post_id)->first();
 
         if(!is_null($dup_like)){
+
            $dup_like->delete();
 
-           return response()->json($this->postLikes($request));
+           return response()->json(['status' => false, 'post' => $this->postLikes($request)]);
            
         }else{
 
-            Like::create([
+            $new_like = Like::create([
                 'user_id' => auth()->user()->id,
                 'post_id' => $request->post_id
             ]);
 
-            return response()->json($this->postLikes($request));
+            $like = Like::where('id', $new_like->id)->with(['user'])->first();
+
+            return response()->json(['status' => true, 'like' => $like]);
         }
     }
     public function postLikes(Request $request){
@@ -128,30 +119,28 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
+        $data = $request->except('files');
 
-        DB::beginTransaction();
+        $post = Post::findOrFail($post->id);
 
-        try {
+        if($request->hasFile('files')){
 
-            Post::where('id', $id)->update([
-                'title' => $request->input('title'),
-                'body' => $request->input('body')
-            ]);
-            
-        } catch (Exception $e) {
-            
-            DB::rollback();
+            $files = $request->file('files');
 
-            return back();
+            $arrayImages = $this->loopFiles($files);
+
+            $image = $this->manageArrayImages($arrayImages);
+
+        }else{
+
+            $image = $post->file;
         }
 
-        DB::commit();
+        $post->update($data + ['file' => $image]);
         
-        return response()->json('successfully updated');
-
-        // return redirect()->route('home')->with('success', 'Post has been updated');
+        return response()->json($post->with(['user', 'comments', 'likes'])->first());
     }
 
     /**

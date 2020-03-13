@@ -34,38 +34,14 @@
 <script>
 	
 	import { mapActions } from 'vuex';
+	import FileFormat from '../../../mixins/File.js';
 
 	export default {
-		data(){
-			return {
-				form: {
-					files: [],
-					body: ''
-				},
-				images: []
-			}
-		},
+		mixins: [ FileFormat ],
 		methods: {
 			...mapActions(['addPost']),
-			formatNames(files){
-
-				if(files.length === 1){
-					return files[0].name
-				}else{
-					return files.length + ' files selected'
-				}
-			},
-			handleFileUpload(e){
-
-				let uploadFiles = e.target.files;
-				
-				for(let i = 0; i < uploadFiles.length; i++){
-					this.form.files.push(uploadFiles[i])
-
-					const file = URL.createObjectURL(uploadFiles[i])
-					this.images.push(file)
-				}
-			},
+			
+			
 			submitPost()
 			{
 				let formData = new FormData();
@@ -78,21 +54,16 @@
 				formData.append('body', this.form.body)
 				formData.append('category_id', 1)
 
+				// create new post
 				this.addPost(formData)
-			},
-			getPreviewImage()
-			{
-				this.form.files.forEach((file, index) => {
 
-					if(/\.(jpe?g|png|gif)$/i.test(file.name)){
-						let reader = new FileReader()
+				//clear upload form
+				this.form.body = '';
+				this.form.files = []
+				this.images = [];
 
-						reader.onload = (e) => {
-							this.$refs['image'+parseInt(index)][0].src = e.target.result
-						}
-						reader.readAsDataURL(file)
-					}
-				})
+				//hide upload modal
+				this.$root.$emit('bv::toggle::modal', 'bv-modal-example', '#show-btn')
 			}
 		}
 	}

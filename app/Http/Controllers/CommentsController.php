@@ -46,8 +46,6 @@ class CommentsController extends Controller
     }
     public function index(Post $post)
     {
-    	return response()->json($post->comments()
-            ->with('user')
-            ->get());
+    	return response()->json($post->comments()->with('user')->get());
     }
 }

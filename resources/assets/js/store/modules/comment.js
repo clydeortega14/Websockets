@@ -4,9 +4,7 @@ const state = () => ({
 })
 const getters = {
 
-	getComments(state){
-		return state.comments
-	}
+	getComments: state => state.comments
 }
 const actions = {
 	async fetchComments({ commit }, postId){

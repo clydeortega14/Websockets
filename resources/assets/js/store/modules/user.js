@@ -6,8 +6,11 @@ const state = () => ({
 })
 const getters = {
 	getToken : (state) => state.token,
+
 	getUserPosts: state => state.user_post,
+
 	getUser: state => state.user,
+
 	loggedIn : (state) => (state.token !== null),
 };
 const actions = {
@@ -35,8 +38,11 @@ const actions = {
 };
 const mutations = {
 	setAccessToken : (state, token) => (state.token = token),
+
 	setUserPosts: (state, posts) => (state.user_post = posts),
+
 	setUser: (state, user) => (state.user = user),
+	
 	destroy(state)
 	{
 		state.token = null

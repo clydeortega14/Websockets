@@ -11,13 +11,13 @@ const actions = {
 	async getAllPosts({ commit })
 	{
 		let response = await axios.get('/api/post-all');
+
 		commit('setPosts', response.data)
 	},
 	async addPost({ commit }, payload)
 	{
 		let response = await axios.post('/api/post-add', payload);
-		console.log(response.data)
-		// commit('addPost', response.data)
+		commit('addPost', response.data)
 	},
 	async deletePost({ commit }, id){
 
@@ -25,45 +25,22 @@ const actions = {
 		commit('deletePost', id);
 	},
 	async updatePost({ commit }, data){
-		const response = await axios.put(`api/post-update/${data.id}`, data);
-		commit('updatePost', data)
-	},
-	getPost({ commit }, id){
-
-		return new Promise((resolve, reject) => {
-			axios.get(`api/post-edit/${id}`)
-			.then(response => {
-				resolve(response.data)
-			}).catch(error => {
-				reject(error)
-			})
-		})
-	},
-	async likePost({ commit }, post)
-	{
-		const response = await axios.post('/api/like', { post_id : post.id });
+		const response = await axios.post(`api/post-update/${data.id}`, data);
 		// console.log(response.data)
-		commit('setPostLikes', response.data)
+		commit('updatePost', response.data)
 	}
 }
 const mutations = {
 	setPosts: (state, posts) => (state.posts = posts),
-	setPostLikes(state, data)
-	{
-		let findPost = state.posts.find(post => post.id === data.id)
-		findPost.likes = data.likes
-	},
-	destroyPost(state){
-		state.posts = []
-	},
-	addPost(state, post){
-		state.posts.unshift(post)
-	},
-	deletePost(state, id){
-		state.posts = state.posts.filter(post => post.id !== id)
-	},
-	updatePost(state, data){
 
+	destroyPost: (state) => (state.posts = []),
+
+	addPost: (state, post) => state.posts.unshift(post), 
+
+	deletePost: (state, id) => (state.posts = state.posts.filter(post => post.id !== id)),
+
+	updatePost(state, data){
+		console.log(data.user)
 		/* find index of the current selected data */
 		let index = state.posts.findIndex(post => post.id === data.id)
 
